@@ -10,11 +10,13 @@ let dx = 1, dy = 0;
 let score = 0;
 let obstacles = [];
 
+// Main game loop to update and render game
 function gameLoop() {
   moveSnake();
   drawGame();
 }
 
+// Move snake based on current direction
 function moveSnake() {
   if (!snake || snake.length === 0) return;
 
@@ -73,16 +75,19 @@ function checkObstacleCollision(head) {
 
 // spawn obstacles every 4 seconds, avoiding snake body
 setInterval(() => {
-  let newObstacle;
-  do {
-    newObstacle = {
-      x: Math.floor(Math.random() * tileCount),
-      y: Math.floor(Math.random() * tileCount)
-    };
-  } while (snake.some(s => s.x === newObstacle.x && s.y === newObstacle.y));
-  obstacles.push(newObstacle);
-}, 4000);
+  let newObstacle = {
+    x: Math.floor(Math.random() * tileCount),
+    y: Math.floor(Math.random() * tileCount)
+  };
 
+  obstacles.push(newObstacle);
+
+  // Limit obstacles for better performance
+  if (obstacles.length > 10) {
+    obstacles.shift();
+  }
+
+}, 4000);
 // wall & self collision
 function checkCollision(head) {
   // hit wall
@@ -128,7 +133,7 @@ function startVoice() {
   recognition.start();
 }
 
-// Gemini AI map generation
+// Generate obstacle map using Gemini AI
 async function generateMap() {
   const API_KEY = "AIzaSyDQLtsiXTyVoCcVPQIumvTXJ-CPBa-LSCw";
   try {
@@ -164,7 +169,7 @@ async function generateMap() {
   }
 }
 
-// keyboard control
+// Handle keyboard arrow key controls
 document.addEventListener("keydown", e => {
   if (e.key === "ArrowUp") { dx = 0; dy = -1; }
   if (e.key === "ArrowDown") { dx = 0; dy = 1; }

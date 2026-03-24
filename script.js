@@ -82,8 +82,8 @@ setInterval(() => {
 
   obstacles.push(newObstacle);
 
-  // Limit obstacles for better performance
-  if (obstacles.length > 10) {
+// Optimizing obstacle array size for performance
+  if (obstacles.length > 8) {
     obstacles.shift();
   }
 
